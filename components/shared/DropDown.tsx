@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 
 import {
   Select,
@@ -21,6 +21,11 @@ import {
 } from '@/components/ui/alert-dialog';
 
 import { ICategory } from '@/lib/database/models/category.model';
+import { Input } from '../ui/input';
+import {
+  createCategory,
+  getAllCategories
+} from '@/lib/actions/category.action';
 
 type DropDownProps = {
   value?: string;
@@ -29,19 +34,34 @@ type DropDownProps = {
 
 function DropDown({ value, onChange }: DropDownProps) {
   const [categories, setCategories] = useState<ICategory[]>([]);
+  const [newCategory, setNewCategory] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      const allCategories = await getAllCategories();
+      setCategories(allCategories);
+    })();
+  }, []);
+
+  function handleAddCategory() {
+    createCategory({
+      categoryName: newCategory.trim()
+    }).then((createdCategory) =>
+      setCategories((prev) => [...prev, createdCategory])
+    );
+  }
 
   return (
     <Select defaultValue={value} onValueChange={onChange}>
       <SelectTrigger className="select-field">
         <SelectValue placeholder="Category" />
       </SelectTrigger>
-
       <SelectContent>
         {categories.map((category) => (
           <SelectItem
             className="select-item p-regular-14"
-            key={category.id}
-            value={category.id}
+            key={category._id}
+            value={category._id}
           >
             {category.name}
           </SelectItem>
@@ -49,20 +69,29 @@ function DropDown({ value, onChange }: DropDownProps) {
 
         <AlertDialog>
           <AlertDialogTrigger className="p-medium-14 flex w-full rounded-sm py-3 pl-8 text-primary-500 hover:bg-primary-50 focus:text-primary-500">
-            Open
+            Add New Category
           </AlertDialogTrigger>
 
           <AlertDialogContent className="bg-white">
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>New Category</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
+                <Input
+                  className="input-field mt-3"
+                  type="text"
+                  placeholder="New Category"
+                  onChange={(ev) => setNewCategory(ev.target.value)}
+                />
               </AlertDialogDescription>
             </AlertDialogHeader>
+
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction>Continue</AlertDialogAction>
+              <AlertDialogAction
+                onClick={() => startTransition(handleAddCategory)}
+              >
+                Add
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
