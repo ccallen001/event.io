@@ -5,8 +5,8 @@ export interface IUser extends Document {
   clerkId: string;
   email: string;
   username: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   photo: string;
 }
 
@@ -26,12 +26,10 @@ const UserSchema = new Schema({
     required: true
   },
   firstName: {
-    type: String,
-    required: true
+    type: String
   },
   lastName: {
-    type: String,
-    required: true
+    type: String
   },
   photo: {
     type: String,
