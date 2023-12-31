@@ -19,7 +19,7 @@ export const eventFormSchema = zod.object({
   imageUrl: zod.string().url({ message: 'Image URL must be a valid URL' }),
   startDateTime: zod.date(),
   endDateTime: zod.date(),
-  category: zod.string(),
+  categoryId: zod.string(),
   price: zod.string(),
   isFree: zod.boolean(),
   url: zod.string().url({ message: 'URL must be a valid URL' })

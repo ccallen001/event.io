@@ -10,6 +10,11 @@ export interface IUser extends Document {
   photo: string;
 }
 
+// clerk user public metadata
+export interface IUserPublicMetadata {
+  userId: string;
+}
+
 const UserSchema = new Schema({
   clerkId: {
     type: String,

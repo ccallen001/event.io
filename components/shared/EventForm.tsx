@@ -10,6 +10,8 @@ import * as zod from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import { createEvent } from '@/lib/actions/event.actions';
+
 import {
   Form,
   FormControl,
@@ -36,7 +38,6 @@ const defaultValues = eventDefaultValues;
 
 function EventForm({ userId, type }: EventFormProps) {
   const [files, setFiles] = useState<File[]>([]);
-  const [startDate, setStartDate] = useState(new Date());
 
   const router = useRouter();
 
@@ -48,8 +49,6 @@ function EventForm({ userId, type }: EventFormProps) {
   });
 
   async function onSubmit(values: zod.infer<typeof eventFormSchema>) {
-    const eventData = values;
-
     let imageUrl = values.imageUrl;
 
     if (!!files.length) {
@@ -62,15 +61,15 @@ function EventForm({ userId, type }: EventFormProps) {
 
     if (type === 'Create') {
       try {
-        // const newEvent = await createEvent({
-        //   event: { ...values, imageUrl },
-        //   userId,
-        //   path: '/'
-        // });
-        // if (newEvent) {
-        //   form.reset();
-        //   router.push(`/events/${newEvent._id}`);
-        // }
+        const newEvent = await createEvent({
+          event: { ...values, imageUrl },
+          userId,
+          path: '/'
+        });
+        if (newEvent) {
+          form.reset();
+          router.push(`/events/${newEvent._id}`);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -103,7 +102,7 @@ function EventForm({ userId, type }: EventFormProps) {
 
           <FormField
             control={form.control}
-            name="category"
+            name="categoryId"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
