@@ -31,6 +31,6 @@ const EventSchema = new Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-const Event = models.event || model<IEvent>('Event', EventSchema);
+const Event = models.Event || model<IEvent>('Event', EventSchema);
 
 export default Event;
