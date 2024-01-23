@@ -1,13 +1,19 @@
+import { useUserPublicMetadata } from '@/hooks/useUserPublicMetadata';
+
+import { getEventById } from '@/lib/actions/event.actions';
+
 import EventForm from '@/components/shared/EventForm';
-import { auth } from '@clerk/nextjs';
 
-import { IUserPublicMetadata } from '@/lib/database/models/user.model';
+type UpdateEventProps = {
+  params: {
+    id: string;
+  };
+};
 
-function UpdateEvent() {
-  const { sessionClaims } = auth();
-  const userPublicMetadata =
-    sessionClaims?.userPublicMetadata as IUserPublicMetadata;
-  const { userId } = userPublicMetadata || null;
+async function UpdateEvent({ params: { id } }: UpdateEventProps) {
+  const { userId } = useUserPublicMetadata();
+
+  const event = await getEventById(id);
 
   return (
     <>
@@ -17,9 +23,13 @@ function UpdateEvent() {
         </h3>
       </section>
 
-      <div className="wrapper my-8">
-        <EventForm {...{ userId, type: 'Update' }} />
-      </div>
+      {!event ? (
+        <div className="m-auto mt-16 w-16 h-16 border-8 border-dotted rounded-full border-primary-500 animate-spin"></div>
+      ) : (
+        <div className={`wrapper my-8 ${!event ? 'animate-pulse' : ''}`}>
+          <EventForm {...{ userId, event, type: 'Update' }} />
+        </div>
+      )}
     </>
   );
 }

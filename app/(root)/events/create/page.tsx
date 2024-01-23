@@ -1,13 +1,9 @@
-import EventForm from '@/components/shared/EventForm';
-import { auth } from '@clerk/nextjs';
+import { useUserPublicMetadata } from '@/hooks/useUserPublicMetadata';
 
-import { IUserPublicMetadata } from '@/lib/database/models/user.model';
+import EventForm from '@/components/shared/EventForm';
 
 function CreateEvent() {
-  const { sessionClaims } = auth();
-  const userPublicMetadata =
-    sessionClaims?.userPublicMetadata as IUserPublicMetadata;
-  const { userId } = userPublicMetadata || null;
+  const { userId } = useUserPublicMetadata();
 
   return (
     <>

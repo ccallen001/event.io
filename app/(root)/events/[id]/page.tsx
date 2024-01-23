@@ -1,4 +1,4 @@
-import { getEvent } from '@/lib/actions/event.actions';
+import { getEventById } from '@/lib/actions/event.actions';
 import { formatDateTime } from '@/lib/utils';
 import { SearchParamProps } from '@/types';
 import Image from 'next/image';
@@ -6,7 +6,7 @@ import Image from 'next/image';
 async function EventDetails({ params }: SearchParamProps) {
   const { id } = params;
 
-  const event = await getEvent(id);
+  const event = await getEventById(id);
 
   return (
     event && (
@@ -38,7 +38,8 @@ async function EventDetails({ params }: SearchParamProps) {
                 <p className="p-medium-18 ml-2 mt-2 sm:mt-0">
                   by{' '}
                   <span className="text-primary-500">
-                    {event.organizer.firstName} {event.organizer.lastName}
+                    {event.organizer.firstName || '?'}{' '}
+                    {event.organizer.lastName || '?'}
                   </span>
                 </p>
               </div>
@@ -49,7 +50,7 @@ async function EventDetails({ params }: SearchParamProps) {
             <div className="flex flex-col gap-5">
               <div className="flex gap-2 md:gap-3">
                 <Image
-                  src="assets/icons/calendar.svg"
+                  src="/assets/icons/calendar.svg"
                   alt="calendar"
                   width={32}
                   height={32}
@@ -68,7 +69,7 @@ async function EventDetails({ params }: SearchParamProps) {
 
               <div className="p-regular-20 flex items-center gap-3">
                 <Image
-                  src="assets/icons/location.svg"
+                  src="/assets/icons/location.svg"
                   alt="location"
                   width={32}
                   height={32}

@@ -10,7 +10,7 @@ import * as zod from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { createEvent } from '@/lib/actions/event.actions';
+import { createEvent, updateEvent } from '@/lib/actions/event.actions';
 
 import {
   Form,
@@ -19,6 +19,8 @@ import {
   FormItem,
   FormMessage
 } from '@/components/ui/form';
+
+import { Event as TEvent } from '@/types';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -32,21 +34,32 @@ import FileUploader from '@/components/shared/FileUploader';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-type EventFormProps = { userId: string; type: 'Create' | 'Update' };
+type EventFormProps = {
+  userId: string;
+  event?: TEvent;
+};
 
 const defaultValues = eventDefaultValues;
 
-function EventForm({ userId, type }: EventFormProps) {
-  const [files, setFiles] = useState<File[]>([]);
-
+function EventForm({ userId, event }: EventFormProps) {
   const router = useRouter();
 
-  const { startUpload } = useUploadThing('imageUploader');
+  const initialValues = event
+    ? {
+        ...event,
+        startDateTime: new Date(event?.startDateTime),
+        endDateTime: new Date(event?.endDateTime)
+      }
+    : defaultValues;
 
   const form = useForm<zod.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
-    defaultValues
+    defaultValues: initialValues
   });
+
+  const [files, setFiles] = useState<File[]>([]);
+
+  const { startUpload } = useUploadThing('imageUploader');
 
   async function onSubmit(values: zod.infer<typeof eventFormSchema>) {
     let imageUrl = values.imageUrl;
@@ -59,20 +72,42 @@ function EventForm({ userId, type }: EventFormProps) {
       imageUrl = uploadedImages[0].url;
     }
 
-    if (type === 'Create') {
+    // update
+    if (event) {
       try {
-        const newEvent = await createEvent({
-          event: { ...values, imageUrl },
+        const { _id } = event;
+
+        const updatedEvent = await updateEvent({
+          event: { ...values, imageUrl, _id },
           userId,
-          path: '/'
+          path: `/events/${_id}`
         });
-        if (newEvent) {
+
+        if (updatedEvent) {
           form.reset();
-          router.push(`/events/${newEvent._id}`);
+          router.push(`/events/${_id}`);
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        return;
       }
+    }
+
+    // create
+    try {
+      const newEvent = await createEvent({
+        event: { ...values, imageUrl },
+        userId,
+        path: '/'
+      });
+
+      if (newEvent) {
+        form.reset();
+        router.push(`/events/${newEvent._id}`);
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -338,7 +373,9 @@ function EventForm({ userId, type }: EventFormProps) {
           size="lg"
           disabled={form.formState.isSubmitting}
         >
-          {form.formState.isSubmitting ? 'Submitting...' : `${type} Event`}
+          {form.formState.isSubmitting
+            ? 'Submitting...'
+            : `${event ? 'Update' : 'Create'} Event`}
         </Button>
       </form>
     </Form>
