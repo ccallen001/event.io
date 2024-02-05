@@ -7,7 +7,9 @@ interface IUserPublicMetadata {
 
 export function useUserPublicMetadata() {
   const { sessionClaims } = auth();
-  const userPublicMetadata =
-    sessionClaims?.userPublicMetadata as IUserPublicMetadata;
-  return userPublicMetadata || null;
+  return (
+    (sessionClaims?.userPublicMetadata as IUserPublicMetadata) || {
+      userId: null
+    }
+  );
 }

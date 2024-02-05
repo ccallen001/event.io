@@ -39,10 +39,7 @@ function Card({ event, hasOrderLink, isPriceHidden }: CardProps) {
         </div>
       )}
 
-      <Link
-        className="flex min-h-[230px] flex-col gap-3 p-5 md:gap-4"
-        href={`/events/${event._id}`}
-      >
+      <div className="flex min-h-[230px] flex-col gap-3 p-5 md:gap-4">
         {!isPriceHidden && (
           <div className="flex gap-2">
             <span className="p-semibold-14 w-min rounded-full bg-green-100 px-4 py-1 text-green-60">
@@ -58,28 +55,29 @@ function Card({ event, hasOrderLink, isPriceHidden }: CardProps) {
           {formatDateTime(event.startDateTime).dateTime}
         </p>
 
-        <p className="p-medium-16 md:p-medium-20 line-clamp-2 flex-1 text-black">
-          {event.title}
-        </p>
+        <Link href={`/events/${event._id}`}>
+          <p className="p-medium-16 md:p-medium-20 line-clamp-2 flex-1 text-black">
+            {event.title}
+          </p>
+        </Link>
 
         <div className="flex-between w-full">
           <p className="p-medium-14 md:p-medium-16 text-gray-600">
             {event.organizer.firstName} {event.organizer.lastName}
           </p>
-
           {hasOrderLink && (
-            <Link href={`/events/${event._id}/orders`}>
-              <p className="text-primary-500">Order Details</p>
+            <Link className="flex" href={`/events/${event._id}/orders`}>
+              <span className="text-primary-500 mr-1">Order Details</span>
               <Image
                 src="/assets/icons/arrow.svg"
-                alt="search"
+                alt="arrow"
                 width={10}
                 height={10}
               />
             </Link>
           )}
         </div>
-      </Link>
+      </div>
     </div>
   );
 }
