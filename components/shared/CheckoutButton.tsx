@@ -11,8 +11,6 @@ type CheckoutButtonProps = {
 };
 
 function CheckoutButton({ event }: CheckoutButtonProps) {
-  console.log(event);
-
   const isEventFinished = !event
     ? true
     : new Date(event?.endDateTime) < new Date();

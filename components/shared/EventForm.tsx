@@ -312,7 +312,7 @@ function EventForm({ userId, event }: EventFormProps) {
                     <FormField
                       control={form.control}
                       name="isFree"
-                      render={({ field }) => (
+                      render={() => (
                         <FormItem>
                           <FormControl>
                             <div className="flex items-center">

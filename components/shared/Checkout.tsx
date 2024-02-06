@@ -39,7 +39,7 @@ function Checkout({ event, userId }: CheckoutProps) {
   }
 
   return (
-    <form action={handleCheckout} method="post">
+    <form onSubmit={handleCheckout}>
       <Button className="button sm:w-fit" type="submit" role="link" size="lg">
         {event.isFree ? 'Get Tickets!' : `Buy Tickets!`}
       </Button>
