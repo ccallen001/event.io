@@ -2,7 +2,7 @@ import { createUploadthing, type FileRouter } from 'uploadthing/next';
 
 const f = createUploadthing();
 
-const auth = (req: Request) => ({ id: 'fakeId' }); // Fake auth function
+const auth = (/* req: Request */) => ({ id: 'fakeId' }); // Fake auth function
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -11,6 +11,7 @@ export const ourFileRouter = {
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
       // This code runs on your server before upload
+      // @ts-ignore
       const user = await auth(req);
 
       // If you throw, the user will not be able to upload

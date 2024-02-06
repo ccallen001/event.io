@@ -16,12 +16,12 @@ function Collection({
   data,
   emptyTitle,
   emptyStatusSubtext,
-  collectionType,
-  limit,
-  page,
-  totalPages,
-  urlParamName
-}: CollectionProps) {
+  collectionType
+}: // limit,
+// page,
+// totalPages,
+// urlParamName
+CollectionProps) {
   return (
     <>
       {data.length ? (

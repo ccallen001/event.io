@@ -10,7 +10,7 @@ import { convertFileToUrl } from '@/lib/utils';
 import Image from 'next/image';
 
 type FileUploaderProps = {
-  onFieldChange: (url: string) => void;
+  onFieldChange: (/* url: string */) => void;
   imageUrl: string;
   setFiles: Dispatch<SetStateAction<File[]>>;
 };
@@ -23,6 +23,7 @@ export default function FileUploader({
   const onDrop = useCallback(
     (acceptedFiles: FileWithPath[]) => {
       setFiles(acceptedFiles);
+      // @ts-ignore
       onFieldChange(convertFileToUrl(acceptedFiles[0]));
     },
     [onFieldChange, setFiles]
