@@ -39,8 +39,14 @@ function Checkout({ event, userId }: CheckoutProps) {
   }
 
   return (
-    <form onSubmit={handleCheckout}>
-      <Button className="button sm:w-fit" type="submit" role="link" size="lg">
+    <form>
+      <Button
+        className="button sm:w-fit"
+        type="button"
+        role="link"
+        size="lg"
+        onClick={handleCheckout}
+      >
         {event.isFree ? 'Get Tickets!' : `Buy Tickets!`}
       </Button>
     </form>
