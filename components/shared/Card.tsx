@@ -65,8 +65,9 @@ function Card({ event, hasOrderLink, isPriceHidden }: CardProps) {
           <p className="p-medium-14 md:p-medium-16 text-gray-600">
             {event.organizer.firstName} {event.organizer.lastName}
           </p>
+
           {hasOrderLink && (
-            <Link className="flex" href={`/events/${event._id}/orders`}>
+            <Link className="flex" href={`/orders?eventId=${event._id}`}>
               <span className="text-primary-500 mr-1">Order Details</span>
               <Image
                 src="/assets/icons/arrow.svg"

@@ -3,14 +3,21 @@ import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
 import Collection from '@/components/shared/Collection';
+import Search from '@/components/shared/Search';
 
 import { getAllEvents } from '@/lib/actions/event.actions';
+import { SearchParamProps } from '@/types';
+import CategoryFilter from '@/components/shared/CategoryFilter';
 
-export default async function Home() {
+export default async function Home({ searchParams }: SearchParamProps) {
+  const query = (searchParams?.query as string) || '';
+  const category = (searchParams?.category as string) || '';
+  const page = Number(searchParams?.page) || 1;
+
   const events = await getAllEvents({
-    query: '',
-    category: '',
-    page: 1,
+    query,
+    category,
+    page,
     limit: 6
   });
 
@@ -50,9 +57,8 @@ export default async function Home() {
         </h2>
 
         <div className="flex flex-col md:flex-row gap-5 w-full">
-          Search
-          <br />
-          Category
+          <Search />
+          <CategoryFilter />
         </div>
 
         <Collection
