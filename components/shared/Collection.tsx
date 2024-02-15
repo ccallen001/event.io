@@ -1,5 +1,6 @@
 import { Event } from '@/types';
 import Card from './Card';
+import Pagination from './Pagination';
 
 type CollectionProps = {
   data: Event[];
@@ -16,12 +17,12 @@ function Collection({
   data,
   emptyTitle,
   emptyStatusSubtext,
-  collectionType
-}: // limit,
-// page,
-// totalPages,
-// urlParamName
-CollectionProps) {
+  collectionType,
+  limit,
+  page,
+  totalPages,
+  urlParamName
+}: CollectionProps) {
   return (
     <>
       {data.length ? (
@@ -38,6 +39,10 @@ CollectionProps) {
               );
             })}
           </ul>
+
+          {(totalPages || 0) > 1 && (
+            <Pagination {...{ urlParamName, page, totalPages }} />
+          )}
         </div>
       ) : (
         <div className="flex-center wrapper min-h-[200px] w-full flex-col gap-3 rounded-[14px] bg-gray-50 py-28 text-center">
