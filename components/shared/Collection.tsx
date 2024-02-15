@@ -18,7 +18,7 @@ function Collection({
   emptyTitle,
   emptyStatusSubtext,
   collectionType,
-  limit,
+  // limit,
   page,
   totalPages,
   urlParamName
